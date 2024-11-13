@@ -11,7 +11,16 @@ local time = 0
 local font = love.graphics.newFont("font/Comfortaa-Regular.ttf", 40);
 love.graphics.setFont(font);
 local major, minor, revision, codename = love.getVersion();
-
+local function wait(seconds)
+  local timer = 0
+  return function()
+    timer = timer + love.timer.getDelta()
+    if timer >= seconds then
+      return true
+    end
+    return false
+  end
+end
 
 function love.load()
    
@@ -35,6 +44,7 @@ function love.draw()
 end;
 function c(r,g,b)love.graphics.setColor(r/255,g/255,b/255);end;
 function intro()
+  
 end
 function GUI()
   local set_width = 0
@@ -44,20 +54,19 @@ function GUI()
   love.graphics.rectangle("fill", 0, 0, window_width, 45+window_height/50,15,15,32676);
   c(255,255,255)
 
-  if UI.Settings(1,1,54,54.5,15) then settings_toggle = not settings_toggle end
+  if UI.Settings(set_width+1,1,54,54.5,15) then settings_toggle = not settings_toggle end
   c(25,25,35);
   if settings_toggle then
-    for i = 0, window_width/1.5 do set_width = i end 
+    for i = 0, window_width/1.5 do wait(0.3); set_width = i-.5 end 
     love.graphics.rectangle("fill", 0, 0, set_width, window_height,15,15,32676);
+    --settings here
+    love.graphics.rectangle("fill", 0, 90, set_width, 150,15,15,32676);
     c(255,255,255)
-    love.graphics.print("Upload: "..upload_speed,window_width/2-100,window_height/2,0,0.7,0.7)
-    love.graphics.print("Download: "..download_speed,window_width/2-100,window_height/2+30,0,0.7,0.7)
-    love.graphics.print("Proxies: "..proxies,window_width/2-100,window_height/2+60 ,0,0.7,0.7)
-    love.graphics.print("Nodes: "..nodes,window_width/2-100,window_height/2+90 ,0,0.7,0.7)
-    love.graphics.print("Up-Time: "..time,window_width/2-100,window_height/2+120,0,0.7,0.7)
-    love.graphics.print("Server: "..server,window_width/2-100,window_height/2+150,0,0.7,0.7)
+    love.graphics.print("Upload: "..upload_speed,5,window_height/2+90,0,0.7,0.7)
+    love.graphics.print("Download: "..download_speed,5,window_height/2+120,0,0.7,0.7)
+    love.graphics.print("Up-Time: "..time,5,window_height/2+150,0,0.7,0.7)
   else
-    for i = window_width/2, 0 do set_width = i end 
+    for i = window_width/2, 0 do wait(0.3); set_width = i end 
   end
   if UI.Connect_Button(0,window_height-64,window_width,55,15,status) then print(1) end
   
